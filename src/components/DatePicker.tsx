@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { format } from "date-fns";
-//import { DateRange } from "react-day-picker";
-
-//import { Calendar } from "@/components/ui/calendar";
 
 import { Button } from "@/components/buttons/Button";
 import { Popover } from "@/components/Popover";
 
 import { CalendarIcon } from "@/components/Icons";
-
-/*
-type DatePickerType = {
-  from: Date;
-  to: Date;
-};
-*/
 
 type DateRange = {
   from: Date;
