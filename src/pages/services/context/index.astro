@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ContextSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Context"
+    desc="Manage information sources to enable In-Context Learning (ICL) without retraining models"
+  >
+    <SideBarConfig basePath="/admin/context" slot="sidebar" client:load />
+  </SideBarLayout>
+</Layout>

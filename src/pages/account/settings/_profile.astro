@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AccountLayout from "@/layouts/AccountLayout.astro";
+import Profile from "@/components/account/Profile";
+---
+
+<Layout withMenu={true}>
+  <AccountLayout title="Profile" desc="Review and update your user profile settings">
+    <Profile client:load />
+  </AccountLayout>
+</Layout>

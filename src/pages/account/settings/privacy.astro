@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+import Privacy from "@/components/account/Privacy";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Privacy"
+    desc="Manage account privacy, configure cookies, etc..."
+  >
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+    <Privacy slot="content" client:load /> 
+  </SideBarLayout>
+</Layout>

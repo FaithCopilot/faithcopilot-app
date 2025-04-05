@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+import Analytics from "@/components/account/Analytics";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Analytics"
+    desc="Monitor, visualize, and analyze activity related to your account"
+  >
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+    <Analytics slot="content" client:load />
+  </SideBarLayout>
+</Layout>

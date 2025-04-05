@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ServicesSideBarConfig';
+import Services from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Services"
+    desc="All of the services that are available to you"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Services slot="content" client:load />
+  </SideBarLayout>
+</Layout>

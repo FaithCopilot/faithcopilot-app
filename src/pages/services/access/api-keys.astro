@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccessSideBarConfig';
+import Content from '@/components/access/APIKeys';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="API Keys"
+    desc="Manage scoped API Keys"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

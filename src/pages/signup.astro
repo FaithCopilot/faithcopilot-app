@@ -1,0 +1,15 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { AuthForm } from "@/components/account/AuthForm";
+const brandName = import.meta.env.PUBLIC_BRAND_NAME;
+const googleClientId = import.meta.env.PUBLIC_GOOGLE_CLIENT_ID;
+---
+
+<AuthLayout>
+  <AuthForm
+    signup
+    brandName={brandName}
+    googleClientId={googleClientId}
+    client:load
+  />
+</AuthLayout>

@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AccountLayout from "@/layouts/AccountLayout.astro";
+import Security from "@/components/account/Security";
+---
+
+<Layout withMenu={true}>
+  <AccountLayout title="Security" desc="Enable enhanced account security">
+    <Security client:load /> 
+  </AccountLayout>
+</Layout>

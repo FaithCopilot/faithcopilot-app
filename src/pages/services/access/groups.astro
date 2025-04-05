@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccessSideBarConfig';
+import Groups from '@/components/access/Groups';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Groups"
+    desc="Manage Groups of Accounts with their corresponding Policies"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Groups slot="content" client:load />
+  </SideBarLayout>
+</Layout>

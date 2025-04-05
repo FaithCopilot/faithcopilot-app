@@ -1,0 +1,15 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+//import Content from '@/components/chat/Deployments';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Chat Profile Deployments"
+    desc="Deploy Chat Profiles via API Key and a Lite App, or using a Chat Widget, and more"
+  >
+    <SideBarConfig slot="sidebar" />
+  </SideBarLayout>
+</Layout>

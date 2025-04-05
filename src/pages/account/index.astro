@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+import Account from "@/components/account/Account";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Account"
+    desc="Your account related information"
+  >
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+    <Account slot="content" client:load />
+  </SideBarLayout>
+</Layout>

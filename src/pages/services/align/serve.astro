@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AlignSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Serve"
+    desc="Serve your custom models as an OpenAI-compatible APIs"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+  </SideBarLayout>
+</Layout>

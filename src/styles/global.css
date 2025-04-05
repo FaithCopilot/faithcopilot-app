@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neutral-100 dark:bg-neutral-800 text-black dark:text-white;
+  }
+  h1 {
+    @apply text-3xl my-2;
+  }
+  h2 {
+    @apply text-2xl my-2;
+  }
+  h3 {
+    @apply text-xl my-2;
+  }
+  h4 {
+    @apply text-lg my-2;
+  }
+  h5 {
+    @apply text-base my-2;
+  }
+  h6 {
+    @apply text-sm my-2;
+  }
+  p {
+    @apply py-2;
+  }
+  a {
+    @apply underline cursor-pointer hover:no-underline text-primary-950; dark:text-primary-500;
+  }
+}
+
+@layer components {
+  .markdown-alert-caution {
+    @apply bg-pink-700 dark:bg-pink-600;
+  }
+  .backgrounds {
+    @apply bg-neutral-100 dark:bg-neutral-800;
+  }
+  .surfaces {
+    @apply bg-white dark:bg-black;
+  }
+  .texts {
+    @apply text-black dark:text-white;
+  }
+  .placeholders {
+    @apply text-neutral-500;
+  }
+  .hovers {
+    @apply hover:bg-neutral-300 dark:hover:bg-neutral-700;
+  }
+  .rings {
+    @apply ring-1 ring-neutral-400 dark:ring-neutral-600;
+  }
+  .borders {
+    @apply border border-neutral-400 dark:border-neutral-600;
+  }
+  .focused {
+    @apply focus:ring-primary-600 dark:focus:ring-primary-400;
+  }
+  .inputs {
+    @apply rounded p-2 surfaces borders focus:outline-none focus:ring-1 focus:border-primary-500;
+  }
+  .tooltip {
+    @apply invisible absolute bg-neutral-200 dark:bg-neutral-700 ring-1 ring-neutral-400 dark:ring-neutral-600 p-1 rounded;
+  }
+  .has-tooltip:hover .tooltip {
+    @apply visible z-50;
+  }
+  .paddings {
+    @apply pt-20 pb-6 px-2 md:px-4; 
+  }
+  .toast {
+    @apply bg-primary-800 text-white borders;
+  }
+  .toast-brand {
+    @apply toast;
+  }
+  .toast-error {
+    @apply toast bg-red-600 dark:bg-red-800;
+  }
+}

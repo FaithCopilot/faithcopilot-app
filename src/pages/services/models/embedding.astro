@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ModelsSideBarConfig';
+import Content from '@/components/models/Models';
+
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Models"
+    desc="Register, remove, and view details of available models"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

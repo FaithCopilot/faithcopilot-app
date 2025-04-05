@@ -1,0 +1,11 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AccountLayout from "@/layouts/AccountLayout.astro";
+import Notifications from "@/components/account/Notifications";
+---
+
+<Layout withMenu={true}>
+  <AccountLayout title="Notifications" desc="Specify any notifications that you would like to receive">
+    <Notifications client:load />
+  </AccountLayout>
+</Layout>

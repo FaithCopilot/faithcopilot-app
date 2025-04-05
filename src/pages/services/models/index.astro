@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ModelsSideBarConfig';
+import Content from '@/components/Services';
+
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Models Service"
+    desc="Manage model registration via third-party providers or custom hosted endpoints"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

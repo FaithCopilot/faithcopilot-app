@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ContextSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Indexes"
+    desc="Configure external indexes (ie, vectors stores, full text search indices)"
+  >
+    <SideBarConfig basePath="/admin/context" slot="sidebar" client:load />
+  </SideBarLayout>
+</Layout>

@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Content from '@/components/chat/Apps';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Hosted Apps"
+    desc="Outsource your app deployments, access, and management to FaithCopilot"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

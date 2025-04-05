@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/DataSideBarConfig';
+import Content from "@/components/data/Data";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Data"
+    desc="Manage your data assets"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

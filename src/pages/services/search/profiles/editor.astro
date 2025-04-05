@@ -1,0 +1,12 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Content from '@/components/workflows/WorkflowEditor';
+---
+
+<Layout withMenu={true}>
+  <Content
+    label="Search Profile"
+    url="/v1/search/profiles"
+    client:load
+  />
+</Layout>

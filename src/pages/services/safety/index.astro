@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/SafetySideBarConfig';
+import Services from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Safety"
+    desc="Manage capabilities designed to help prevent accidents, misuse, or other harmful consequences"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Services slot="content" client:load />
+  </SideBarLayout>
+</Layout>

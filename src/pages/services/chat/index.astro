@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Services from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Chat"
+    desc="Configure profiles, register models, process feedback, and more chat options"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Services slot="content" client:load />
+  </SideBarLayout>
+</Layout>

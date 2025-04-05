@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ContextSideBarConfig';
+import Documents from "@/components/context/Documents";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Documents"
+    desc="Indexed data available to enrich your AI inputs (ie, RAG - Retrieval Augmented Generation)"
+  >
+    <SideBarConfig basePath="/admin/context" slot="sidebar" client:load />
+    <Documents slot="content" client:load />
+  </SideBarLayout>
+</Layout>

@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/SearchSideBarConfig';
+import Content from '@/components/search/Profiles';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Search Profiles"
+    desc="Search Profiles are custom configurations of Contexts, Safety, etc..."
+  >
+    <SideBarConfig url="/v1/search/profiles" slot="sidebar" />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Content from '@/components/chat/ChatWidgets';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Chat Widgets"
+    desc="Manage Chat Widgets to be deployed on existing websites"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

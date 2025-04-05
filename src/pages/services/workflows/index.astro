@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/WorkflowsSideBarConfig';
+import Services from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Workflows"
+    desc="Create, test, and maintain workflows to chain together Contexts, Rules, Guardrails, etc..."
+  >
+    <SideBarConfig slot="sidebar" />
+    <Services slot="content" client:load />
+  </SideBarLayout>
+</Layout>

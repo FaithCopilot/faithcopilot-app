@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AlignSideBarConfig';
+import Data from "@/components/align/Data";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Datasets"
+    desc="Version datasets for training custom models"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Data slot="content" client:load />
+  </SideBarLayout>
+</Layout>

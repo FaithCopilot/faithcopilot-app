@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccessSideBarConfig';
+import Users from '@/components/access/Users';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Users"
+    desc="Manage User, Agents, and Service Accounts"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Users slot="content" client:load />
+  </SideBarLayout>
+</Layout>

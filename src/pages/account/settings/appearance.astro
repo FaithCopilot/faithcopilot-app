@@ -1,0 +1,13 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+import Appearance from "@/components/account/Appearance";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout title="Appearance" desc="Personalize the app look-and-feel">
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+    <Appearance slot="content" client:load />
+  </SideBarLayout>
+</Layout>

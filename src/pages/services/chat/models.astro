@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Content from '@/components/chat/Models';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Models"
+    desc="Register language models for Chat, Chat Profiles, and more"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

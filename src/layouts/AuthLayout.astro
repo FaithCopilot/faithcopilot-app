@@ -1,0 +1,72 @@
+---
+import "@/styles/global.css";
+import "@/styles/brand.css";
+import { ViewTransitions } from "astro:transitions";
+import { getAvailableLanguages, rtlLanguageConstants } from "@/hooks/use-i18n";
+import { Dictionary } from "@/i18n";
+import { Toaster } from "@/components/Toast";
+const languages = getAvailableLanguages({ dictionary: Dictionary });
+const brandName = import.meta.env.PUBLIC_BRAND_NAME;
+---
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={brandName} />
+    <link rel="icon" href="/favicon.ico?v20240830" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{brandName}</title>
+    <script is:inline define:vars={{ languages, rtlLanguageConstants }}>
+      const handleCustomizations = () => {
+
+        // theme
+
+        let theme = localStorage.getItem("theme");
+        if (!theme || theme === "auto") {
+          const isAuto = theme === "auto"; 
+          theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          // skip setting theme if it is "auto"
+          if (!isAuto) {
+            localStorage.setItem("theme", theme);
+          };
+        };
+        if (["dark","light"].includes(theme)) {
+          document.documentElement.classList[theme === "dark" ? "add" : "remove"]("dark");
+        };
+
+        // i18n
+
+        let lang = localStorage.getItem("lang");
+        if (!lang) {
+          lang = "en";
+          localStorage.setItem("lang", lang);
+          document.documentElement.lang = "en";
+          document.documentElement.dir = "ltr";
+        };
+        if (languages.map(lang => lang.value).includes(lang)) {
+          document.documentElement.lang = lang;
+          if ([...rtlLanguageConstants].includes(lang)) {
+            document.documentElement.dir = "rtl";
+          } else {
+            document.documentElement.dir = "ltr";
+          };
+        };
+
+        return;
+      };
+      // runs on initial navigation
+      handleCustomizations();
+      // runs on view transitions navigation
+      document.addEventListener("astro:page-load", handleCustomizations);
+    </script>
+    <ViewTransitions />
+  </head>
+  <body class="flex flex-col space-y-4 align-items justify-center min-h-screen mx-auto mb-12 w-96">
+    <Toaster
+      client:load
+      transition:persist
+    />
+    <slot />
+  </body>
+</html>

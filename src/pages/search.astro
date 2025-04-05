@@ -1,0 +1,8 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Search from '@/components/Search';
+---
+
+<Layout withMenu={true}>
+  <Search multi={true} client:load />
+</Layout>

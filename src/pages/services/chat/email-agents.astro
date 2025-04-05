@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Content from '@/components/chat/EmailAgents';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Email Agents"
+    desc="Manage Email Agents deployments to interact with a Chat Profile over email"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

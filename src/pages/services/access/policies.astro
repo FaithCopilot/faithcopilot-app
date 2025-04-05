@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccessSideBarConfig';
+import Policies from '@/components/access/Policies';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Policies"
+    desc="Manage access policies"
+  >
+    <SideBarConfig slot="sidebar" />
+    <Policies slot="content" client:load />
+  </SideBarLayout>
+</Layout>

@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/DataSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Audit Logs"
+    desc="Review the historical audit logs"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+  </SideBarLayout>
+</Layout>

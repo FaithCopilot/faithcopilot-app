@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ChatSideBarConfig';
+import Content from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Sessions"
+    desc="Historical chat sessions to review, clone, filter, learn from, and more..."
+  >
+    <SideBarConfig slot="sidebar" />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

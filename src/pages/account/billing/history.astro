@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Billing History"
+    desc="Review previous invoices, transactions, etc..."
+  >
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+  </SideBarLayout>
+</Layout>

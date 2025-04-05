@@ -1,0 +1,16 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AccountSideBarConfig';
+import APIKeys from "@/components/account/APIKeys";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="API Keys"
+    desc="API Keys enable you to access the API programmatically. You can create, revoke, and manage API Keys here"
+  >
+    <SideBarConfig slot="sidebar" client:load transition:persist />
+    <APIKeys slot="content" client:load />
+  </SideBarLayout>
+</Layout>

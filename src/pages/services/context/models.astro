@@ -1,0 +1,14 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/AlignSideBarConfig';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Models"
+    desc="Manage custom models and configure base models"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+  </SideBarLayout>
+</Layout>

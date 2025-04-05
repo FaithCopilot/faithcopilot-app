@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ContextSideBarConfig';
+import Content from "@/components/context/Embeddings";
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Embeddings"
+    desc="Configure external embedding providers"
+  >
+    <SideBarConfig basePath="/admin/context" slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

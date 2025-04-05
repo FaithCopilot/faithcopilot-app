@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/IndexesSideBarConfig';
+import Content from '@/components/indexes/Indexes';
+
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Indexes"
+    desc="Register, remove, and view details of available indexes"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

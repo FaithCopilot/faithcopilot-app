@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/SearchSideBarConfig';
+import Services from '@/components/Services';
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Search"
+    desc="Configure profiles, register vector stores and document indexes, and more"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Services slot="content" client:load />
+  </SideBarLayout>
+</Layout>

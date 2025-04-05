@@ -1,0 +1,17 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SideBarLayout from '@/layouts/SideBarLayout.astro';
+import SideBarConfig from '@/components/astro/sidebar/ModelsSideBarConfig';
+import Content from '@/components/Services';
+
+---
+
+<Layout withMenu={true}>
+  <SideBarLayout
+    title="Endpoints"
+    desc="Host custom and fine-tuned models"
+  >
+    <SideBarConfig slot="sidebar" client:load />
+    <Content slot="content" client:load />
+  </SideBarLayout>
+</Layout>

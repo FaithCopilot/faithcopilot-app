@@ -1,0 +1,966 @@
+---
+import Apps from "@/components/Apps";
+const PUBLIC_API_URL = import.meta.env.PUBLIC_API_URL;
+---
+
+<html>
+    <head>
+      <script is:inline define:vars={{ PUBLIC_API_URL }}>
+function getURLParam(paramName) {
+    const url = new URL(window.location.href);
+    const allParams = new URLSearchParams(url.search);
+    const param = allParams.get(paramName) ?? null;
+    return param;
+}
+
+
+
+function setOption(key, value) {
+    let options = JSON.parse(localStorage.getItem('options')) || {};
+    options[key] = value;
+    localStorage.setItem('options', JSON.stringify(options));
+    return true;
+}
+
+
+
+function getOption(key) {
+    let options = JSON.parse(localStorage.getItem('options')) || {};
+    var option = options[key] ? options[key] : null;
+    return option;
+}
+
+
+
+function goToLanguageURL(language) {
+    const url = `/?hl=${encodeURIComponent(language)}`;
+    //window.location.href = url;
+}
+
+
+
+function removeHistoricElement(chatId) {
+    document.getElementById(`historic-prompt-${chatId}`).remove();
+    localStorage.removeItem(chatId);
+}
+
+
+
+async function addLanguagesToLangSelect() {
+    const languageSelect = document.getElementById('language-select');
+    const languages = document.availableLanguages;
+
+    Object.keys(languages).forEach(lang => {
+        var newOption = document.createElement('option');
+        newOption.value = lang;
+        newOption.text = `${languages[lang]} ${lang}`;
+        languageSelect.append(newOption);
+    });
+
+    languageSelect.value = getURLParam('hl') ?? 'en';
+}
+
+
+function translateElement(element, translations, language) {
+    const key = element.getAttribute("data-translate");
+    if (translations[language] && translations[language][key]) {
+      const translation = translations[language][key];
+
+      if (element.hasAttribute('data-content-skip')) {
+        element.setAttribute('data-message', translation);
+      } else {
+        if (element.hasAttribute('data-message')) {
+            element.setAttribute('data-message', translation);
+        }
+        element.textContent = translation;
+      }
+    }
+  }
+
+
+async function changeLanguage(language = 'en') {
+    try {
+        if (!language || language === 'null') {
+            language = 'en';
+        }
+
+        //const response = await fetch('locale.json');
+        //const translations = await response.json();
+        const translations = {
+  "en": {
+    "flag": "🇺🇸",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Explore Prompts",
+    "chat_history": "Chat History",
+    "nothing_here": "nothing here",
+    "greeting": "What can I help with?",
+    "message_faith_copilot": "Message Faith Copilot",
+    "chat_suggestion_1": "Disciple Making",
+    "chat_suggestion_2": "Write a sermon",
+    "chat_suggestion_3": "Ideas for Small Groups",
+    "disclaimer": "AI can make mistakes. Check important info.",
+    "chat_error_message": "Sorry, there was an error processing your request."
+  },
+  "es": {
+    "flag": "🇲🇽",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Explorar Sugerencias",
+    "chat_history": "Historial de Chat",
+    "nothing_here": "nada aquí",
+    "greeting": "¿Cómo puedo ayudarte?",
+    "message_faith_copilot": "Chatea con Faith Copilot",
+    "chat_suggestion_1": "Cómo hacer discípulos",
+    "chat_suggestion_2": "Escribe un sermón",
+    "chat_suggestion_3": "Ideas para Grupos Pequeños",
+    "disclaimer": "La IA puede cometer errores. Verifica información que sea importante.",
+    "chat_error_message": "Lo sentimos, hubo un error al procesar tu solicitud."
+  },
+  "es_AR": {
+    "flag": "🇦🇷",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Explorar Sugerencias",
+    "chat_history": "Historial de Chat",
+    "nothing_here": "vacío",
+    "greeting": "¿Cómo te puedo ayudar?",
+    "message_faith_copilot": "Chateá con Faith Copilot",
+    "chat_suggestion_1": "Cómo hacer discípulos",
+    "chat_suggestion_2": "Escribí un sermón",
+    "chat_suggestion_3": "Ideas para Grupos Pequeños",
+    "disclaimer": "La IA puede cometer errores. Verificá información que sea importante.",
+    "chat_error_message": "Uh, hubo un error al procesar tu solicitud."
+  },
+  "fr": {
+    "flag": "🇫🇷",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Explorer les Suggestions",
+    "chat_history": "Historique de Chat",
+    "nothing_here": "rien ici",
+    "greeting": "Comment puis-je vous aider ?",
+    "message_faith_copilot": "Envoyer un message au Faith Copilot",
+    "chat_suggestion_1": "Faire des Disciples",
+    "chat_suggestion_2": "Écrire un sermon",
+    "chat_suggestion_3": "Idées pour Petits Groupes",
+    "disclaimer": "L'IA peut faire des erreurs. Vérifiez les informations importantes.",
+    "chat_error_message": "Désolé, une erreur s'est produite lors du traitement de votre demande."
+  },
+  "pt": {
+    "flag": "🇧🇷",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Explorar Sugestões",
+    "chat_history": "Histórico de Chat",
+    "nothing_here": "nada aqui",
+    "greeting": "Como posso ajudar?",
+    "message_faith_copilot": "Enviar mensagem para Faith Copilot",
+    "chat_suggestion_1": "Fazer Discípulos",
+    "chat_suggestion_2": "Escrever um sermão",
+    "chat_suggestion_3": "Ideias para Pequenos Grupos",
+    "disclaimer": "A IA pode cometer erros. Verifique informações importantes.",
+    "chat_error_message": "Desculpe, ocorreu um erro ao processar sua solicitação."
+  },
+  "zh_cn": {
+    "flag": "🇨🇳",
+    "title": "信仰副驾驶 - 聊天",
+    "faith_copilot": "信仰副驾驶",
+    "faith_copilot_logo": "信仰副驾驶 💬 ✝️",
+    "explore_prompts": "探索提示",
+    "chat_history": "聊天记录",
+    "nothing_here": "这里什么都没有",
+    "greeting": "我能帮您什么？",
+    "message_faith_copilot": "给信仰副驾驶发送消息",
+    "chat_suggestion_1": "培养门徒",
+    "chat_suggestion_2": "写一篇讲道",
+    "chat_suggestion_3": "小组讨论的想法",
+    "disclaimer": "AI可能会出错。请核对重要信息。",
+    "chat_error_message": "抱歉，处理您的请求时出错。"
+  },
+  "zh_tw": {
+    "flag": "🇹🇼",
+    "title": "信仰副駕駛 - 聊天",
+    "faith_copilot": "信仰副駕駛",
+    "faith_copilot_logo": "信仰副駕駛 💬 ✝️",
+    "explore_prompts": "探索提示",
+    "chat_history": "聊天記錄",
+    "nothing_here": "這裡什麼都沒有",
+    "greeting": "我能幫您什麼？",
+    "message_faith_copilot": "給信仰副駕駛發送消息",
+    "chat_suggestion_1": "門徒訓練",
+    "chat_suggestion_2": "寫一篇講道",
+    "chat_suggestion_3": "小組討論的想法",
+    "disclaimer": "AI可能會出錯。請核對重要信息。",
+    "chat_error_message": "抱歉，處理您的請求時出錯。"
+  },
+  "ar": {
+    "flag": "🇸🇦",
+    "title": "الطيار المساعد للإيمان - الدردشة",
+    "faith_copilot": "الطيار المساعد للإيمان",
+    "faith_copilot_logo": "الطيار المساعد للإيمان 💬 ✝️",
+    "explore_prompts": "استكشاف الاقتراحات",
+    "chat_history": "سجل الدردشة",
+    "nothing_here": "لا يوجد شيء هنا",
+    "greeting": "كيف يمكنني مساعدتك؟",
+    "message_faith_copilot": "أرسل رسالة إلى الطيار المساعد للإيمان",
+    "chat_suggestion_1": "صنع التلاميذ",
+    "chat_suggestion_2": "كتابة عظة",
+    "chat_suggestion_3": "أفكار للمجموعات الصغيرة",
+    "disclaimer": "الذكاء الاصطناعي قد يخطئ. تحقق من المعلومات المهمة.",
+    "chat_error_message": "عذرًا، حدث خطأ أثناء معالجة طلبك."
+  },
+  "de": {
+    "flag": "🇩🇪",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "Vorschläge erkunden",
+    "chat_history": "Chatverlauf",
+    "nothing_here": "nichts hier",
+    "greeting": "Womit kann ich helfen?",
+    "message_faith_copilot": "Nachricht an Faith Copilot senden",
+    "chat_suggestion_1": "Jüngerschaft",
+    "chat_suggestion_2": "Eine Predigt schreiben",
+    "chat_suggestion_3": "Ideen für Kleingruppen",
+    "disclaimer": "KI kann Fehler machen. Überprüfen Sie wichtige Informationen.",
+    "chat_error_message": "Entschuldigung, bei der Verarbeitung Ihrer Anfrage ist ein Fehler aufgetreten."
+  },
+  "he": {
+    "flag": "🇮🇱",
+    "title": "Faith Copilot - Chat",
+    "faith_copilot": "Faith Copilot",
+    "faith_copilot_logo": "Faith Copilot 💬 ✝️",
+    "explore_prompts": "חקור הצעות",
+    "chat_history": "היסטוריית שיחות",
+    "nothing_here": "אין כאן כלום",
+    "greeting": "במה אוכל לעזור?",
+    "message_faith_copilot": "שלח הודעה ל-Faith Copilot",
+    "chat_suggestion_1": "עשיית תלמידים",
+    "chat_suggestion_2": "כתיבת דרשה",
+    "chat_suggestion_3": "רעיונות לקבוצות קטנות",
+    "disclaimer": "ה-AI עשוי לטעות. בדוק מידע חשוב.",
+    "chat_error_message": "מצטערים, אירעה שגיאה בעת עיבוד הבקשה שלך."
+  }
+}
+
+        // Store available languages for later use
+        const languages = [];
+        if (translations) {
+            Object.keys(translations).forEach(lang => {
+                if (translations[lang]['flag']) {
+                    languages[lang] = translations[lang]['flag'];
+                }
+            });
+        }
+        document.availableLanguages = languages;
+
+        // Replace translatable terms
+        document.querySelectorAll('[data-translate]').forEach((element) => {
+            translateElement(element, translations, language);
+        });
+
+        if (translations[language] && translations[language]['message_faith_copilot']) {
+            document.getElementById('chatbar-input').placeholder = translations[language]['message_faith_copilot'];
+        }
+
+        document.chatErrorMessage = translations[language]['chat_error_message'] ?? 'Sorry, there was an error processing your request.';
+
+        setOption('language', language);
+        addLanguagesToLangSelect();
+    } catch (error) {
+        console.error("Error loading translation file:", error);
+    }
+  }
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("*** DOMContentLoaded");
+    const paramLanguage = getURLParam('hl');
+    if (paramLanguage) {
+        changeLanguage(paramLanguage);
+    }
+
+    const storedLanguage = getOption('language');
+    if ((!paramLanguage || paramLanguage === 'null') && storedLanguage) {
+        goToLanguageURL(storedLanguage);
+    }
+
+    if ((!paramLanguage || paramLanguage === 'null') && !storedLanguage ) {
+        goToLanguageURL('en');
+
+    }
+
+    rtl = false;
+    const rtlLanguages = ['ar', 'he'];
+    if (rtlLanguages.includes(paramLanguage)) {
+        rtl = true;
+    }
+
+    const main = document.getElementById('main');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarHeader = document.getElementById('sidebar-header');
+    const sidebarContainer = document.getElementById('sidebar-container');
+    const sidebarToggleButton = document.getElementById('sidebar-hide');
+    const SidebarToggleButtonHeader = document.getElementById('sidebar-show-button');
+    const sidebarCloseMobile = document.getElementById('sidebar-close-mobile');
+    const sidebarPromptHistory = document.getElementById('sidebar-prompt-history');
+    const sidebarShadow = document.getElementById('sidebar-shadow');
+    const contentHeader = document.querySelector('.content-header');
+    const headerButtons = document.getElementById('header-buttons');
+    const chatbarContainer = document.getElementById('chatbar-container');
+    const chatbar = document.getElementById('chatbar');
+    const chatbarInput = document.getElementById('chatbar-input');
+    const chatbarSendButton = document.getElementById('chatbar-send-button');
+    const mainHeading = document.getElementById('main-heading');
+    const suggestionsContainer = document.getElementById('chat-suggestions-container');
+    const contentDiv = document.getElementById('content');
+    const nothingHere = document.getElementById('nothing-here');
+    const messagesContainer = document.getElementById('messages-container');
+    const modelDropdownToggle = document.getElementById('model-dropdown-toggle');
+    const modelDropdown = document.getElementById('model-dropdown');
+    const modelDropdownContainer = document.getElementById('model-dropdown-container');
+    const hamburgerMenu = document.getElementById('hamburger-menu');
+    const spinner = document.getElementById('spinner');
+    const languageSelect = document.getElementById('language-select');
+    const settingsMenu = document.getElementById('settings-menu');
+    const saveSettingsButton = document.getElementById('save-settings-button');
+
+    if ( rtl === true ) {
+        main.classList.add('rtl');
+        chatbar.classList.add('rtl');
+        chatbarInput.classList.add('rtl');
+        sidebar.classList.add('rtl');
+        sidebarHeader.classList.add('rtl');
+        sidebarContainer.classList.add('rtl');
+        messagesContainer.classList.add('rtl');
+        headerButtons.classList.add('rtl');
+        contentHeader.classList.add('rtl');
+
+        document.querySelectorAll('.sidebar-link').forEach(element => {
+            element.classList.add('rtl');
+        });
+    }
+
+
+
+    languageSelect.addEventListener('change', function() {
+        const selectedLang = this.value;
+        const url = `/?hl=${encodeURIComponent(selectedLang)}`;
+        //window.location.href = url;
+    });
+
+
+
+    function getSystemPrompt() {
+        var systemPrompt = 'You are a helpful Christian chatbot which always prioritizes the context above you in order to answer questions, and always responds according to Christian tradition and doctrine';
+        var options = JSON.parse(localStorage.getItem('options'));
+        if (options && options.systemPrompt) {
+            systemPrompt = options.systemPrompt;
+        }
+        return systemPrompt;
+    }
+
+
+
+    loadHistoricChats();
+    const systemPrompt = getSystemPrompt();
+    document.messageHistory = [{ role: 'system', content: systemPrompt}];
+    document.currChatId = null;
+    document.currModelId = getCurrModelId();
+
+
+
+    function getCurrModelId() {
+        const defaultModelId = '01J48CZW4GTAQ7DMWV0ADJCZ6X';
+        let options = JSON.parse(localStorage.getItem('options')) || { modelId: defaultModelId };
+
+        if (!options.modelId || options.modelId === null) {
+            options.modelId = defaultModelId;
+        }
+
+        localStorage.setItem('options', JSON.stringify(options));
+        return options.modelId;
+    }
+
+
+
+    function addNewMessage(message, role = '') {
+        if (message.startsWith("<br><br>")) {
+            message = message.substring(8);
+        }
+
+        var messageHTML = '<div class="message">';
+        var className = 'message-text';
+        if (role === 'assistant') {
+            className = 'message-text fade-in';
+            messageHTML += `
+            <div class="avatar-chat">
+                <img src="resources/img/favicon.ico" class="avatar">
+            </div>`;
+        }
+
+        if (role === 'user') {
+            var messageHTML = '<div class="message user">';
+        }
+
+
+        if (role === 'info') {
+            var messageHTML = '<div class="message info">';
+        }
+
+        messageHTML += `<div class="${className}">${message}</div>
+                        </div>`;
+
+
+        messagesContainer.insertAdjacentHTML('beforeend', messageHTML);
+    }
+
+
+
+    function addEmptyAgentMessage() {
+        const emptyMessageHTML = `
+        <div class="message">
+            <div class="avatar-chat">
+                <img src="resources/img/favicon.ico" class="avatar">
+            </div>
+            <div class="message-text"></div>
+        </div>`;
+        messagesContainer.insertAdjacentHTML('beforeend', emptyMessageHTML);
+    }
+
+
+
+    function addHistoricChatElement(keyword, chatId) {
+        keyword = keyword.length > 15 ? keyword.substring(0, 14) + '…' : keyword;
+        nothingHere.remove();
+        var classrtl = rtl === false ? '' : 'rtl';
+
+        elementHTML = `<div class="sidebar-link prompt-link ${classrtl}" id="historic-prompt-${chatId}" title="${keyword}">
+                            <div class="sidebar-link-text" data-chat-id="${chatId}">${keyword}</div>
+                            <div class="sidebar-link-option">
+                                <svg onclick="javascript:removeHistoricElement(${chatId}); "width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.5555 4C10.099 4 9.70052 4.30906 9.58693 4.75114L9.29382 5.8919H14.715L14.4219 4.75114C14.3083 4.30906 13.9098 4 13.4533 4H10.5555ZM16.7799 5.8919L16.3589 4.25342C16.0182 2.92719 14.8226 2 13.4533 2H10.5555C9.18616 2 7.99062 2.92719 7.64985 4.25342L7.22886 5.8919H4C3.44772 5.8919 3 6.33961 3 6.8919C3 7.44418 3.44772 7.8919 4 7.8919H4.10069L5.31544 19.3172C5.47763 20.8427 6.76455 22 8.29863 22H15.7014C17.2354 22 18.5224 20.8427 18.6846 19.3172L19.8993 7.8919H20C20.5523 7.8919 21 7.44418 21 6.8919C21 6.33961 20.5523 5.8919 20 5.8919H16.7799ZM17.888 7.8919H6.11196L7.30423 19.1057C7.3583 19.6142 7.78727 20 8.29863 20H15.7014C16.2127 20 16.6417 19.6142 16.6958 19.1057L17.888 7.8919ZM10 10C10.5523 10 11 10.4477 11 11V16C11 16.5523 10.5523 17 10 17C9.44772 17 9 16.5523 9 16V11C9 10.4477 9.44772 10 10 10ZM14 10C14.5523 10 15 10.4477 15 11V16C15 16.5523 14.5523 17 14 17C13.4477 17 13 16.5523 13 16V11C13 10.4477 13.4477 10 14 10Z" fill="red"></path></svg>
+                            </div>
+                        </div>`;
+
+        sidebarPromptHistory.insertAdjacentHTML('beforebegin', elementHTML);
+    }
+
+
+
+    function getAllHistoricChats() {
+        let historicChats = {};
+        if (localStorage.length > 0) {
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                let value = localStorage.getItem(key);
+                if (key !== 'options') {
+                    historicChats[key] = JSON.parse(value);
+                }
+            }
+        }
+        return historicChats;
+    }
+
+
+
+    async function loadHistoricChats() {
+        const historicChats = getAllHistoricChats();
+
+        if (historicChats && Object.keys(historicChats).length > 0) {
+            Object.entries(historicChats).forEach(([chatId, data]) => {
+                var chatTitle = data['title'];
+                addHistoricChatElement(chatTitle, chatId);
+            });
+        }
+    }
+
+
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('sidebar-link-text')) {
+            var chatId = event.target.getAttribute('data-chat-id');
+            showChatById(chatId);
+            messagesContainer.classList.remove('hidden');
+            document.currChatId = chatId;
+            if (!sidebarShadow.classList.contains('hidden')) {
+                sidebarShadow.click();
+            }
+        }
+
+        if (event.target.closest('.chat-suggestion')) {
+            const userMessage = event.target.getAttribute('data-message');
+            if (userMessage && userMessage.length > 0) {
+                document.messageToSend = userMessage;
+                sendChat();
+            }
+        }
+    });
+
+
+
+    function showChatById(chatId) {
+        messagesContainer.innerHTML = '';
+        let chatJSON = getChatById(chatId);
+        let messages = chatJSON.messages;
+        messages.forEach(msg => {
+            if (msg.role !== 'system' ) {
+                addNewMessage(msg.content, msg.role);
+            }
+        });
+        document.messageHistory = chatJSON.messages;
+        document.currChatId = chatId;
+        suggestionsContainer.classList.add('hidden');
+        sendChatbarToBottom();
+        showChats();
+    }
+
+
+
+    function getChatById(chatId) {
+        let chatData = localStorage.getItem(chatId);
+        return JSON.parse(chatData);
+    }
+
+
+
+    function showChats() {
+        suggestionsContainer.classList.add('hidden');
+        messagesContainer.classList.remove('hidden');
+    }
+
+
+
+    function hideChats() {
+        messagesContainer.classList.add('hidden');
+        suggestionsContainer.classList.remove('hidden');
+    }
+
+
+
+    function updateLocalStorageChat(chatId) {
+        let currChatStorage = localStorage.getItem(chatId);
+        currChatStorage = JSON.parse(currChatStorage);
+        let newChatStorage = {
+            'title': currChatStorage.title,
+            'messages': document.messageHistory,
+        };
+        localStorage.setItem(chatId, JSON.stringify(newChatStorage));
+    }
+
+
+
+    function getRelevantMessageHistory() {
+        return document.messageHistory.filter(chatRow => chatRow.role !== 'info');
+    }
+
+
+
+    function sendChatbarToBottom() {
+        mainHeading.remove();
+        contentDiv.style.justifyContent = 'space-between';
+        chatbar.classList.add('send-to-bottom');
+        chatbarContainer.classList.add('send-to-bottom');
+        suggestionsContainer.remove();
+        chatbarInput.value = '';
+    }
+
+
+
+    function scrollToLowestMessage() {
+        messagesContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+
+
+    async function sendChat() {
+        let currChatId = document.currChatId;
+
+        if (currChatId === null ) {
+            currChatId = generateRandomId();
+            document.currChatId = currChatId;
+        }
+
+        var userMessage = document.messageToSend;
+        if (!userMessage) {
+            var userMessage = chatbarInput.value.trim();
+            userMessage = sanitizeInput(userMessage);
+        }
+
+        if ( localStorage.getItem(currChatId) === null ) {
+            const chatTitle = userMessage.length > 15 ? userMessage.substring(0, 14) + '…' : userMessage;
+
+            let newChatStorage = {
+                'title': chatTitle,
+                'messages': document.messageHistory,
+            }
+
+            localStorage.setItem(currChatId, JSON.stringify(newChatStorage));
+
+            // Don't add new historic element links if it's not a new chat
+            if (localStorage.getItem(document.currChatId) !== null) {
+                addHistoricChatElement(chatTitle, currChatId);
+            }
+        }
+
+        addNewMessage(userMessage, 'user');
+        spinner.classList.remove('hidden');
+        scrollToLowestMessage();
+        addEmptyAgentMessage();
+        scrollToLowestMessage();
+        sendChatbarToBottom();
+
+        document.messageHistory.push({ role: 'user', content: userMessage });
+        document.messageToSend = null;
+        updateLocalStorageChat(currChatId);
+        var relevantMessageHistory = getRelevantMessageHistory();
+        fetch(`${PUBLIC_API_URL}/v1/chat/completions`, {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                model: document.currModelId,
+                temperature: 0.3,
+                messages: relevantMessageHistory,
+                stream: true,
+            })
+        })
+        .then(response => {
+            spinner.classList.add('hidden');
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            let currBubble;
+            document.lastMessage = '';
+
+            function processStream(resolve) {
+                currBubble = document.getElementsByClassName('message-text');
+                currBubble = currBubble[currBubble.length - 1];
+
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        spinner.classList.add('hidden');
+                        if (buffer.trim() !== '[DONE]') {
+                            try {
+                                if (buffer.trim().length > 0) {
+                                    const data = JSON.parse(buffer);
+                                    const assistantMessage = data.choices[0].delta.content;
+                                    document.lastMessage += assistantMessage
+                                    currBubble.append(assistantMessage);
+                                }
+                            } catch (error) {
+                                console.error('Error parsing JSON:', error);
+                                currBubble.append(document.chatErrorMessage);
+                            }
+                        }
+
+                        resolve();
+                        return;
+                    }
+
+                    buffer += decoder.decode(value, { stream: true });
+                    let lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    lines.forEach(line => {
+                        if (line.startsWith('data: ')) {
+                            const jsonString = line.slice(6);
+                            if (jsonString.trim() === '[DONE]') {
+                                return;
+                            }
+
+                            try {
+                                const data = JSON.parse(jsonString);
+                                let assistantMessage = data.choices[0].delta.content.replace(/\n/g, '<br>').replace(/[\*|＊]{2}(.*?)[\*|＊]{2}/g, '<b>$1</b>');
+                                assistantMessage = formatMarkdown(assistantMessage);
+                                document.lastMessage += assistantMessage;
+                                currBubble.innerHTML += assistantMessage;
+
+                            } catch (error) {
+                                console.error('Error parsing JSON:', error);
+                                currBubble.append(document.chatErrorMessage);
+
+                            }
+                        }
+                    });
+                    processStream(resolve);
+                }).catch(error => {
+                    console.error('Error reading stream:', error);
+                    if (currBubble) {
+                        spinner.classList.add('hidden');
+                        currBubble.append(document.chatErrorMessage);
+                    }
+                    resolve();
+                });
+            }
+        //     var spinner = true;
+
+            return new Promise(resolve => {
+                processStream(resolve);
+            }).then(() => {
+                document.messageHistory.push({ role: 'assistant', content: document.lastMessage });
+                document.windowScrolled = false;
+                updateLocalStorageChat(currChatId);
+            });
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            if (currBubble) {
+                currBubble.append(document.chatErrorMessage);
+            }
+        });
+    }
+
+
+    chatbarSendButton.addEventListener('click', async() => {
+        if ( sendButtonIsEnabled ) {
+            sendChat();
+        }
+    });
+
+
+
+    sidebarToggleButton.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+        headerButtons.classList.toggle('hidden');
+    });
+
+
+
+    sidebarCloseMobile.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+        sidebarShadow.classList.toggle('hidden');
+    });
+
+
+
+    sidebarShadow.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+        sidebarShadow.classList.toggle('hidden');
+    });
+
+
+
+    window.addEventListener("orientationchange", function() {
+        if (window.orientation === 90 || window.orientation === -90) {
+            if (!sidebarShadow.classList.contains('hidden')) {
+                sidebarShadow.click();
+            }
+        }
+    });
+
+
+
+    SidebarToggleButtonHeader.addEventListener('click', () => {
+        headerButtons.classList.toggle('hidden');
+        sidebar.classList.toggle('hidden');
+    });
+
+
+
+    hamburgerMenu.addEventListener('click', () => {
+        sidebar.classList.toggle('show');
+        sidebarShadow.classList.toggle('hidden');
+    });
+
+
+
+    modelDropdownToggle.addEventListener('click', (event) => {
+        const isExpanded = modelDropdown.getAttribute('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                modelDropdown.classList.add('hidden');
+                modelDropdown.setAttribute('aria-expanded', 'false');
+            } else {
+                modelDropdown.classList.remove('hidden');
+                modelDropdown.setAttribute('aria-expanded', 'true');
+            }
+        event.stopPropagation();
+    });
+
+
+
+    chatbarInput.addEventListener('input', function() {
+        const inputField = this;
+
+        if (inputField.value.trim() === '') {
+            chatbarSendButton.classList.remove('enabled');
+        } else {
+            chatbarSendButton.classList.add('enabled');
+        }
+    });
+
+
+
+    function checkAndSendMessage() {
+        if (chatbarSendButton.classList.contains('enabled')) {
+            sendChat();
+        }
+    }
+
+
+
+    function sanitizeInput(input) {
+        return input
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;")
+            .replace(/\//g, "&#x2F;");
+    }
+
+
+
+    function formatMarkdown(text) {
+        var formattedText = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        return formattedText;
+    }
+
+
+
+    function generateRandomId() {
+        let min = 100000;
+        let max = 999999;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+
+
+    chatbarSendButton.addEventListener('click', () => {
+        checkAndSendMessage();
+    });
+
+
+
+    chatbarInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            checkAndSendMessage();
+        }
+    });
+
+
+    async function getAllModels() {
+        fetch(`${PUBLIC_API_URL}/v1/models?public=true`, { credentials: 'include' })
+        .then(response => {
+            response.json().then((data) => {
+                if (data) {
+                    data.forEach(model => {
+                        var modelVisibility = 'hidden';
+                        if ( model['id'] == document.currModelId) {
+                            modelVisibility = '';
+                        }
+
+                        var classrtl = rtl === false ? '' : 'rtl';
+                        var modelItemHTML = `
+                        <div class="model-item ${classrtl}" data-model-id="${model['id']}">
+                            <div class="model-item" data-model-id="${model['id']}">${model['name']}</div>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" data-model-id="${model['id']}" class="model-checkmark ${modelVisibility}" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12ZM16.0755 7.93219C16.5272 8.25003 16.6356 8.87383 16.3178 9.32549L11.5678 16.0755C11.3931 16.3237 11.1152 16.4792 10.8123 16.4981C10.5093 16.517 10.2142 16.3973 10.0101 16.1727L7.51006 13.4227C7.13855 13.014 7.16867 12.3816 7.57733 12.0101C7.98598 11.6386 8.61843 11.6687 8.98994 12.0773L10.6504 13.9039L14.6822 8.17451C15 7.72284 15.6238 7.61436 16.0755 7.93219Z" fill="currentColor"></path></svg>
+                            </div>`;
+                        modelDropdownContainer.insertAdjacentHTML('afterbegin', modelItemHTML);
+                    });
+                }    
+            });
+        });
+    }
+
+    getAllModels();
+
+
+
+    async function updateModelCheckmarks(oldModelId, newModelId) {
+        const oldCheckmark = document.querySelector(`.model-checkmark[data-model-id='${oldModelId}']`);
+        if (oldCheckmark) {
+            oldCheckmark.classList.add('hidden');
+        }
+
+        const newCheckmark = document.querySelector(`.model-checkmark[data-model-id='${newModelId}']`);
+        if (newCheckmark) {
+            newCheckmark.classList.remove('hidden');
+        }
+    }
+
+
+
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.model-item')) {
+            var modelItem = event.target.closest('.model-item');
+            var oldModelId = document.currModelId;
+            var newModelId = modelItem.getAttribute('data-model-id');
+            setOption('modelId', newModelId);
+
+            var currChatId = document.currChatId;
+            var currChatStorage = JSON.parse(localStorage.getItem(currChatId));
+            var modelSwitchMessage = `You are now chatting with ${newModelId}`;
+            var newMessageArray = { role: 'info', content: modelSwitchMessage };
+            
+            currChatStorage['messages'].push(newMessageArray);
+            localStorage.setItem(currChatId, JSON.stringify(currChatStorage));
+            
+            document.messageHistory.push(newMessageArray);
+            document.currModelId = newModelId;
+            updateModelCheckmarks(oldModelId, newModelId);
+            modelDropdownToggle.click();
+            addNewMessage(modelSwitchMessage, 'info');
+        }
+
+        if (!event.target.closest('modal-dropdown-toggle') ) {
+            if (modelDropdown.getAttribute('aria-expanded') === 'true') {
+                modelDropdown.setAttribute('aria-expanded', 'false');
+                modelDropdown.classList.add('hidden');
+            }
+        }
+    });
+  });
+      </script>
+      <script is:inline define:vars={{ PUBLIC_API_URL }}>
+        const fetchHTML = async(url) => {
+          try {
+            const res = await fetch(url);
+            if (res?.status === 401) {
+              const searchParams = new URLSearchParams(window.location.search);
+              const id = searchParams.get('id');
+              window.location.href = `/login?redirect=/v1/chat/apps/html?id=${id}`
+            }
+            if (!res?.ok) {
+              console.error(res);
+              //window.location.href = '/404';
+            };
+            const html = await res.text();
+            document.documentElement.innerHTML = html;
+            /*
+            const data = await res.json();
+            document.title = data.brand;
+            document.querySelector('#chatbar-input').setAttribute('placeholder', `Message ${data.brand}`);
+            document.querySelectorAll('.brand').forEach(element => {
+              element.textContent = data.brand;
+            });
+            document.documentElement.style.setProperty('--main-primary', data.colors.primary);
+            document.documentElement.style.setProperty('--main-secondary', data.colors.secondary);
+            document.documentElement.style.setProperty('--main-tertiary', data.colors.tertiary);
+            document.documentElement.style.setProperty('--link', data.colors.link);
+            */
+          } catch (error) {
+            console.error('Error fetching HTML:', error);
+            document.querySelector('#error-container').textContent = 'Failed to load content';
+          };
+        };
+        const searchParams = new URLSearchParams(window.location.search);
+        const id = searchParams.get('id');
+        fetchHTML(`${PUBLIC_API_URL}/v1/chat/apps/html?id=${id}`, { credentials: 'include' });
+        //fetchHTML(`${PUBLIC_API_URL}/v1/chat/apps/html-data?id=${id}`, { credentials: 'include' });
+      </script>
+    </head>
+      <body>
+        <Apps client:load />
+    </body>
+</html>
