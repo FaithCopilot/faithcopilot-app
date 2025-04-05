@@ -52,6 +52,16 @@ Before you begin, ensure you have the following installed:
     ```
 
 
+### Highlighted Frameworks and Libraries
+
+* [React](https://react.dev/)
+* [Astro](https://astro.build/) used for:
+  - routing and [MPA (Multi-Page App)](https://docs.astro.build/en/concepts/why-astro/#server-first) capabilities,
+  - innovative [Islands](https://docs.astro.build/en/concepts/islands/) architecture,
+  - [fast-by-default](https://docs.astro.build/en/concepts/why-astro/#fast-by-default) approach,
+  - the integrated [Vite](https://vite.dev/) build system for rendering React components
+
+
 ### External Dependencies
 
 The only external service that this project relies on is a FaithCopilot-compatible API (whether the open source local offering or the FC Cloud 🐟☁️  API):
