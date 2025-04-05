@@ -14,8 +14,6 @@
     "@types/react": "~19.1.0",
     "@types/react-dom": "~19.1.1",
     "astro": "^5.6.1",
-    "aws4fetch": "^1.0.20",
-    "cookie": "^1.0.2",
     "date-fns": "^4.1.0",
     "jose": "^6.0.10",
     "lucide-react": "^0.416.0",
