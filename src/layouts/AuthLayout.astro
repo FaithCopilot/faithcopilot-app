@@ -1,7 +1,7 @@
 ---
 import "@/styles/global.css";
 import "@/styles/brand.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import { getAvailableLanguages, rtlLanguageConstants } from "@/hooks/use-i18n";
 import { Dictionary } from "@/i18n";
 import { Toaster } from "@/components/Toast";
@@ -60,7 +60,7 @@ const brandName = import.meta.env.PUBLIC_BRAND_NAME;
       // runs on view transitions navigation
       document.addEventListener("astro:page-load", handleCustomizations);
     </script>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body class="flex flex-col space-y-4 align-items justify-center min-h-screen mx-auto mb-12 w-96">
     <Toaster

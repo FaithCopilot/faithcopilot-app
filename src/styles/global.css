@@ -28,7 +28,7 @@
     @apply py-2;
   }
   a {
-    @apply underline cursor-pointer hover:no-underline text-primary-950; dark:text-primary-500;
+    @apply underline cursor-pointer hover:no-underline text-primary-600;
   }
 }
 

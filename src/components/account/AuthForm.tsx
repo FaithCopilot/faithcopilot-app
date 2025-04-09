@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/buttons/Button";
 import { toast } from "@/components/Toast";
 
 import { useTranslations } from "@/hooks/use-i18n";
@@ -57,23 +58,14 @@ const fetchAuth = async ({
   const res = await fetcher(url, options);
   if (res?.status === 401) {
     const unauthorizedMessage = messages?.unauthorized ?? "Unauthorized";
-    //toast.error(unauthorizedMessage);
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: unauthorizedMessage
-    });
+    //console.error(unauthorizedMessage);
+    toast(unauthorizedMessage, { className: "toast-error" });
     return;
   }
   if (!res?.ok) {
-    const errorMessage =
-      messages?.error ?? "Something went wrong, try again later";
-    //toast.error(errorMessage);
-    toast({
-      variant: "destructive",
-      title: "Error",
-      description: errorMessage
-    });
+    const errorMessage = messages?.error ?? "Something went wrong, try again later";
+    //console.error(errorMessage);
+    toast(errorMessage, { className: "toast-error" });
     return;
   }
   // we anticipate an error (stay on page), or a redirect (handled by fetcher)
@@ -115,8 +107,9 @@ export const AuthForm = ({
   googleClientId?: string;
 }) => {
   const { t } = useTranslations();
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<string|undefined>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
 
   const onSubmit = async () => {
     setLoading(true);
@@ -129,12 +122,14 @@ export const AuthForm = ({
       };
     }
     if (signup) {
-      url = "/v1/auth/signup";
-      /*
-      messages = {
-        error: "Email already exists",
+      if (data?.confirmPassword !== data?.password) {
+        toast("Passwords do not match", { className: "toast-error" });
+        return;
       };
-      */
+      url = "/v1/auth/signup";
+      messages = {
+        unauthorized: "Email already exists",
+      };
     }
     if (confirm) {
       url = "/v1/auth/confirm-email";
@@ -159,6 +154,7 @@ export const AuthForm = ({
     if (reset) {
       if (!passwordCode) {
         // TODO: error toast
+        toast("", { className: "toast-error" });
         return;
       };
       data["code"] = passwordCode;
@@ -184,7 +180,6 @@ export const AuthForm = ({
 
   useEffect(() => {
     const initializeGsi = () => {
-      if (!googleClientId) return;
       (window as any)?.google?.accounts?.id?.initialize({
         client_id: googleClientId,
         callback: handleCredentialResponse
@@ -201,6 +196,7 @@ export const AuthForm = ({
       );
       //(window as any)?.google?.accounts?.id?.prompt();
     };
+    if (!googleClientId) return;
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.onload = initializeGsi;
@@ -278,17 +274,101 @@ export const AuthForm = ({
   return (
     <div className="flex flex-col space-y-4 align-items justify-center min-h-screen mx-auto mb-12 w-96">
       <span className="text-4xl font-bold mx-auto">{brandName}</span>
-      <span className="text-2xl mx-auto pt-2 pb-12">{headerText}</span>
+      <span className="text-2xl mx-auto pt-2 pb-4">{headerText}</span>
       <div className="pl-4 pr-6">
         <form
           onSubmit={onSubmit}
           className="flex flex-col space-y-2"
         >
           {googleClientId && (
-            <div id="continue-with-google" className="mx-auto mb-8"></div>
+            <div id="continue-with-google" className="mx-auto pb-4"></div>
           )}
-          {(login || signup) && (
+          {googleClientId && (login || signup) && (
+            <hr className="w-full max-w-xs h-px border-neutral-400 dark:border-neutral-700 pb-4" />
+          )}
+          {forgot && (
             <div className="pt-4">
+              <span className="texts text-sm">
+                {authForgotPasswordInstructions}
+              </span>
+            </div>
+          )}
+          {(confirm || mfa) && (
+            <div className="pt-4">
+              <label className="text-sm font-bold">
+                {authCode}
+                <input
+                  required
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  className="inputs w-full max-w-xs"
+                />
+              </label>
+            </div>
+          )}
+          {(login || signup || forgot) && (
+            <div className="flex flex-col space-y-4">
+              <label className="text-sm font-bold">
+                {authEmail}
+                <input
+                  required
+                  type="email"
+                  value={data?.email}
+                  onChange={(e) => setData({ ...data, email: e.target.value })}
+                  className="inputs w-full max-w-xs"
+                />
+              </label>
+          {(login || signup || reset) && (
+              <label className="text-sm font-bold">
+                {authPassword}
+                <input
+                  type="password"
+                  className="inputs w-full max-w-xs"
+                  value={data?.password}
+                  onChange={(e) =>
+                    setData({ ...data, password: e.target.value })
+                  }
+                  required
+                />
+              </label>
+            )}
+              {(signup || reset) && (
+                <label className="text-sm font-bold">
+                  {authConfirmPassword}
+                  <input
+                    type="password"
+                    className="inputs w-full max-w-xs"
+                    onChange={(e) =>
+                      setData({ ...data, confirmPassword: e.target.value })
+                    }
+                    required
+                  />
+                </label>
+              )}
+              <Button 
+                type="submit"
+                disabled={loading}
+                label={buttonText}
+                className="w-full max-w-xs justify-center"
+              />
+              {login && (
+                <div>
+                  {/*
+                  <div className="pt-4">
+                    <a href="/forgot-password">{authForgotPassword}</a>
+                  </div>
+                  */}
+                  <div className="placeholders pt-4">
+                    {authSignupQuestion} <a href="/signup">{authSignup}</a>
+                  </div>
+                </div>
+              )}
+              {signup && (
+                <div className="placeholders pt-4">
+                  {authLoginQuestion} <a href="/login">{authLogin}</a>
+                </div>
+              )}
               <span className="placeholders text-sm">
                 {authAcknowledgement1}{" "}
                 <a href="/terms-of-service">{authAcknowledgementTos}</a>{" "}
@@ -297,6 +377,13 @@ export const AuthForm = ({
               </span>
             </div>
           )}
+          {/*confirm && (
+            <div className="pt-4">
+              <span className="placeholders text-sm">
+                <a onClick={() => onResendCode()}>{authResendCode}</a>
+              </span>
+            </div>
+          )*/}
         </form>
       </div>
     </div>

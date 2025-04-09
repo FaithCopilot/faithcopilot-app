@@ -3,7 +3,7 @@ import "@/styles/scrollbar.css";
 import "@/styles/markdown.css";
 import "@/styles/global.css";
 import "@/styles/brand.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import NavBarConfig from "@/components/astro/NavBarConfig";
 import { getAvailableLanguages, rtlLanguageConstants } from "@/hooks/use-i18n";
 import { Dictionary } from "@/i18n";
@@ -64,7 +64,7 @@ const brandName = import.meta.env.PUBLIC_BRAND_NAME;
       // runs on view transitions navigation
       document.addEventListener("astro:page-load", handleCustomizations);
     </script>
-    <ViewTransitions />
+    <ClientRouter />
 	</head>
   <body class="md:overflow-hidden">
     <Toaster

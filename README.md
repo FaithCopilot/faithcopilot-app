@@ -62,7 +62,6 @@ Before you begin, ensure you have the following installed:
   - the integrated [Vite](https://vite.dev/) build system for rendering React components
 * [TailwindCSS v3](https://v3.tailwindcss.com/): we realize this decision is somewhat controversial, and tbh we are not committed to Tailwind (esp after v4 breaking changes), and may migrate to pure CSS in the future (perhaps sooner if someone wants to make a compelling case and issue a PR)
 * [SWR](https://swr.vercel.app/): a data fetching library that implements `stale-while-revalidating` [HTTP RFC 5861](https://tools.ietf.org/html/rfc5861)
-* [React Icons](https://github.com/react-icons/react-icons): support for most popular React icon sets, and utilizes ES6 imports to include only the icons being used
 
 
 ### External Dependencies
